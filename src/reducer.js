@@ -17,14 +17,14 @@ const reducer = (state, action) => {
     return { ...state, cart: newCart };
   }
 
-  if (action.type == INCREASE) {
+  if (action.type === INCREASE) {
     const newCart = new Map(state.cart);
     const item = newCart.get(action.payload.id);
     const newAmount = item.amount + 1;
     newCart.set(action.payload.id, { ...item, amount: newAmount });
     return { ...state, cart: newCart };
   }
-  if (action.type == DECREASE) {
+  if (action.type === DECREASE) {
     const newCart = new Map(state.cart);
     const item = newCart.get(action.payload.id);
     if (item.amount === 1) {
@@ -34,6 +34,17 @@ const reducer = (state, action) => {
       newCart.set(action.payload.id, { ...item, amount: newAmount });
     }
     return { ...state, cart: newCart };
+  }
+
+  if (action.type === LOADING) {
+    return { ...state, loading: true };
+  }
+  if (action.type === DISPLAY_ITEMS) {
+    return {
+      ...state,
+      loading: false,
+      cart: new Map(action.payload.data.map((item) => [item.id, item])),
+    };
   }
 
   throw new Error(`no matching action type: ${action}`);
